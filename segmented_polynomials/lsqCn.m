@@ -1,4 +1,4 @@
-function [theta, resnorm, residual, exitflag, output, lambda] = lsqCn(x, y, degree, breaks, options)
+function [theta, resnorm, residual, exitflag, output, lambda] = lsqCn(x, y, degree, breaks, noderiv, options)
 %LSQCN - segmented polynomial fitting
 % Ensures function continutity on breaks and first derivative continuity
 % if both degrees on break are at least quadratic.
@@ -6,16 +6,17 @@ function [theta, resnorm, residual, exitflag, output, lambda] = lsqCn(x, y, degr
 % y - vector of responses at experimental points
 % degree - vector with polynomial degree of each segment
 % breaks - vector of break point values
+% noderiv - do not impose first derivate continuity
 %
 % if a point coincides with a break, its value is used in both segments.
-% Author: Pedro Reis dos Santos, University of Lisbon, 2020
 % Example:
 % x = -30:2:30;
 % y = atan(x);
 % degree = [4 1 4]; % 3-segments
 % breaks = [6 10]; % 2 breaks (between segments)
 % [theta, resnorm, residual, exitflag, output, lambda] = lsqCn(x, y, degree, breaks)
-   if nargin < 5
+   if nargin < 5; noderiv = false; end
+   if nargin < 6
       options = optimoptions('lsqlin','Algorithm','interior-point','Display','off');
    end
    x = x(:); % ensure/convert x is a vertical vector
@@ -55,7 +56,7 @@ function [theta, resnorm, residual, exitflag, output, lambda] = lsqCn(x, y, degr
       m = degree(i); % degree before break
       n = degree(i+1); % degree after break
       C(Ci,Cj:(Cj+m+n+1)) = [ breaks(i).^(0:m) -breaks(i).^(0:n) ];
-      if m > 1 || n > 1 % include derivate continuity
+      if ~noderiv && (m > 1 || n > 1) % include derivate continuity
          Ci = Ci + 1;
          C(Ci,Cj:(Cj+m+n+1)) = [ 0 (1:m).*breaks(i).^(0:(m-1)) 0 -(1:n).*breaks(i).^(0:(n-1))  ];
       end
