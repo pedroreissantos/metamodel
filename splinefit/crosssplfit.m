@@ -4,7 +4,7 @@
 %            univariate responses 'yrep': number of replications per point,
 %            break points.
 % Author: Pedro Reis dos Santos, University of Lisbon, 2020
-% Ex: [Jm,ci2]=crosssplfit(xdata,yrep, [-.4 .4]])
+% Ex: [resnorm]=crosssplfit(xdata,yrep, [-.4 .4]])
 function [ resnorm ] = crosssplfit(xdata, yrep, breaks)
 	npts = size(xdata,1);
 	if npts ~= size(yrep,1)

@@ -5,7 +5,7 @@
 %            nonlinear 'func'tion
 %            initial guess for the parameters 'theta0'.
 % Author: Pedro Reis dos Santos, University of Lisbon, 2020
-% Ex: [Jm,ci2]=crosspolyfit(xdata,yrep, 4)
+% Ex: [resnorm]=crosspolyfit(xdata,yrep, 4)
 function [ resnorm ] = crosspolyfit(xdata, yrep, func, theta0)
 	npts = size(xdata,1);
 	if npts ~= size(yrep,1)

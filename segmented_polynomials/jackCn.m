@@ -8,10 +8,11 @@
 % Returns central value (Jm), half-length CI (ci2)
 % Author: Pedro Reis dos Santos, University of Lisbon, 2020
 % Ex: [Jm,ci2]=jackCn(xdata,yrep,[3 3 3], [[-.6 -.4]; [.4 .6]])
-function [ Jm, ci2, J ] = jackCn(xdata, yrep, degree, sub, tol, niter, alpha)
-	if nargin < 5; tol = 1e-6; end
-	if nargin < 6; niter = 100; end
-	if nargin < 7; alpha = .05; end
+function [ Jm, ci2, J ] = jackCn(xdata, yrep, degree, sub, noderiv, tol, niter, alpha)
+  if nargin < 5; noderiv = false; end
+	if nargin < 6; tol = 1e-6; end
+	if nargin < 7; niter = 100; end
+	if nargin < 8; alpha = .05; end
 
 	npts = size(xdata,1);
 	if npts ~= size(yrep,1)
@@ -20,14 +21,12 @@ function [ Jm, ci2, J ] = jackCn(xdata, yrep, degree, sub, tol, niter, alpha)
 	end
 	nreps = size(yrep, 2);
 
-	[ theta, breaks, resnorm, iter ] = minCn(xdata, mean(yrep')', degree, sub, tol, niter);
+	[ theta, breaks, resnorm, iter ] = minCn(xdata, mean(yrep')', degree, sub, noderiv, tol, niter);
 	base = [ breaks theta' ];
 	for r = 1:nreps
 		y = [yrep(:,1:(r-1)) yrep(:,(r+1):nreps)];
-		[ t(r,:), b(r,:) ] = minCn(xdata, mean(y')', degree, sub, tol, niter);
-		rep = [ b(r,:) t(r,:) ];
-		J(r,:) = nreps .* base - (nreps-1) .* rep;
-	end
-
-	Jm = mean(J);
+		[ t(r,:), b(r,:) ] = minCn(xdata, mean(y')', degree, sub, noderiv, tol, niter);
+    end
+    J = nreps .* base - (nreps-1) .* [b t];
+    Jm = mean(J);
 	ci2 = sqrt(var(J)./nreps) * tinv(1-alpha/2, nreps-1);

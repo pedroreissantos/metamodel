@@ -8,7 +8,7 @@
 %            maximum 'tol'erance,
 %            maximum number of iterations 'niter'.
 % Author: Pedro Reis dos Santos, University of Lisbon, 2020
-% Ex: [Jm,ci2]=crossCn(xdata,yrep,[3 3 3], [[-.6 -.4]; [.4 .6]])
+% Ex: [resnorm]=crossCn(xdata,yrep,[3 3 3], [[-.6 -.4]; [.4 .6]])
 function [ resnorm ] = crossCn(xdata, yrep, degree, sub, noderiv, tol, niter)
   if nargin < 5; noderiv = false; end
 	if nargin < 6; tol = 1e-6; end
