@@ -7,9 +7,16 @@ format long e
 [t b r i] = minCn(xdata,ydata,[1 3 1],[[-.8 -.4];[.4 .6]])
 [t b r i] = minCn(xdata,ydata,[2 3 2],[[-.8 -.4];[.4 .6]])
 [t b r i] = minCn(xdata,ydata,[3 3 3],[[-.8 -.4];[.4 .6]])
-[t, b, r, i] = minCn(xdata,ydata,[2 2 2 2], [[-1 -.4]; [-.4 .8]; [.8 1]])
-[t, b, r, i] = minCn(xdata,ydata,[2 1 2], [[-1 0]; [0 1]])
-[t, b, r, i] = minCn(xdata,ydata,[1 2 1], [[-1 0]; [0 1]])
-[t, b, r, i] = minCn(xdata,ydata,[2 2 2], [[-1 0]; [0 1]])
+[t b r i] = minCn(xdata,ydata,[1 3 1],[[-.8 -.4];[.4 .6]],true) % C^0
+[t b r i] = minCn(xdata,ydata,[2 3 2],[[-.8 -.4];[.4 .6]],true) % C^0
+[t b r i] = minCn(xdata,ydata,[3 3 3],[[-.8 -.4];[.4 .6]],true) % C^0
+[t, b, r, i] = minCn(xdata,ydata,[2 2 2 2],[[-1 -.5];[-.025 .025];[.5 1]])
+[t, b, r, i] = minCn(xdata,ydata,[2 1 2],[[-1 -.3];[.3 1]])
+[t, b, r, i] = minCn(xdata,ydata,[1 2 1],[[-1 -.2];[.2 1]])
+[t, b, r, i] = minCn(xdata,ydata,[2 2 2],[[-1 -.3];[.3 1]])
+[t, b, r, i] = minCn(xdata,ydata,[2 2],[[-.4 .4]])
 yrep=msg2log(:,3:22);
+crossCn(xdata,yrep,[1 1 1],[[-.8 -.4];[.4 .6]])
+crossCn(xdata,yrep,[1 1 1],[[-.8 -.4];[.4 .6]],true) % C^0
 [Jm, ci2] = jackCn(xdata,yrep,[1 1 1],[[-.8 -.4];[.4 .6]])
+[Jm, ci2] = jackCn(xdata,yrep,[1 1 1],[[-.8 -.4];[.4 .6]],true) % C^0

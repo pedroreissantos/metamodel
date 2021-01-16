@@ -4,7 +4,7 @@
 %            univariate responses 'yrep': number of replications per point,
 %            polynomial degree.
 % Author: Pedro Reis dos Santos, University of Lisbon, 2020
-% Ex: [resnorm]=crosspolyfit(xdata,yrep, 4)
+% Ex: [ resnorm ] = crosspolyfit(xdata,yrep, 4)
 function [ resnorm ] = crosspolyfit(xdata, yrep, degree)
 	npts = size(xdata,1);
 	if npts ~= size(yrep,1)
