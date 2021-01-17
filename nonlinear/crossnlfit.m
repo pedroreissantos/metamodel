@@ -1,23 +1,26 @@
-%crossnlfit - cross validation for nonlinear fitting
+%crossnlfit - cross validation for nonlinear fitting (leave-one-out)
 %
-% Arguments: univariatedesign points 'xdata',
-%            univariate responses 'yrep': number of replications per point,
-%            nonlinear 'func'tion
+% Arguments: univariate design points 'xdata',
+%            univariate responses 'ydata',
+%            nonlinear 'func'tion,
 %            initial guess for the parameters 'theta0'.
 % Author: Pedro Reis dos Santos, University of Lisbon, 2020
-% Ex: [ resnorm ] = crossnlfit(xdata,yrep, 4)
-function [ resnorm ] = crossnlfit(xdata, yrep, func, theta0)
+% Ex:
+%   fatan = @(tt,x)  tt(1)+tt(2)*atan(tt(3)*x+tt(4));
+%   ttzero = [ 90 -36 0.6 -14 ];
+%   [ resnorm ] = crossnlfit(xdata,ydata,fatan,ttzero)
+function [ resnorm ] = crossnlfit(xdata, ydata, func, theta0)
 	npts = size(xdata,1);
-	if npts ~= size(yrep,1)
-		disp('different number of points in xdata and yrep')
+	if npts ~= size(ydata,1)
+		disp('different number of points in xdata and ydata')
 		return
 	end
-	nreps = size(yrep, 2);
+	options = optimoptions('lsqcurvefit','Display','off');
 
 	for pt = 1:npts
-		y = [yrep(1:(pt-1),:); yrep((pt+1):npts,:)];
+		y = [ydata(1:(pt-1)); ydata((pt+1):npts)];
 		x = [xdata(1:(pt-1)); xdata((pt+1):npts)];
-		theta = lsqcurvefit(func,theta0,x,mean(y')');
+		theta = lsqcurvefit(func,theta0,x,y,[],[],options);
 		yhat(pt) = feval(func, theta, xdata(pt));
 	end
-	resnorm = sqrt(sum((yhat - mean(yrep')).^2));
+	resnorm = sqrt(sum((yhat - ydata').^2));
